@@ -3,6 +3,9 @@
            https://api.github.com/users/<your name>
 */
 
+
+
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -25,7 +28,17 @@
 */
 
 const followersArray = [];
-
+const ax2 = axios.get('https://api.github.com/users/benjberg/followers');
+ax2.then(response => {
+  response.data.forEach(item =>{
+   
+    Content.append(newCard(item));
+  })
+});
+console.log(followersArray);
+followersArray.forEach(item =>{
+  Content.append(newCard(item));
+})
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
 
@@ -45,6 +58,60 @@ const followersArray = [];
 </div>
 
 */
+function newCard(object) {
+  const card = document.createElement('div'),
+        pic = document.createElement('img'),
+        info = document.createElement('div'),
+        name = document.createElement('h3'),
+        userName= document.createElement('p'),
+        location = document.createElement('p'),
+        profile = document.createElement('p'),
+        link = document.createElement('a'),
+        followers = document.createElement('p'),
+        following = document.createElement('p'),
+        bio = document.createElement('p');
+
+        pic.src = object.avatar_url;
+        name.textContent = object.name;
+        userName.textContent= object.login;
+        location.textContent= `location: ${object.location}`;
+        profile.textContent = `profile: ${object.html_url}`;
+        followers.textContent = `followers: ${object.followers}`;
+        following.textContent = `following: ${object.following}`;
+        bio.textContent = `Bio: ${object.bio}`;
+        link.href = object.html_url;
+
+        card.appendChild(pic);
+        card.appendChild(info);
+        info.appendChild(name);
+        info.appendChild(userName);
+        info.appendChild(location);
+        info.appendChild(link);
+        link.appendChild(profile);
+        info.appendChild(followers);
+        info.appendChild(following);
+        info.appendChild(bio);
+        
+        
+        card.classList.add('card');
+        info.classList.add('card-info');
+        name.classList.add('name');
+        userName.classList.add('username');
+
+return card;
+
+
+}
+const Content = document.querySelector('.cards');
+axios.get ('https://api.github.com/users/benjberg').then(response => {
+  console.log(response.data);
+  
+
+    Content.prepend(newCard(response.data))
+  
+}).catch(error => {
+  console.log("the data was not returned", error)
+});
 
 /* List of LS Instructors Github username's: 
   tetondan
